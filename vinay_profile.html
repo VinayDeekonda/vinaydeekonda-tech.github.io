@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Vinay Deekonda</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Vinay Deekonda, Staff Data Engineer at Asurion. 15+ years building lakehouse platforms, datamarts, and data pipelines on Databricks, Spark, and AWS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: the career read as a data pipeline — hero thesis + schema card, a medallion
+     lineage band (sources → bronze → silver → gold → diamond), case studies as
+     problem/approach/outcome, then a compact commit-log style timeline. */
+  :root {
+    --ink: #11161d;           /* text */
+    --paper: #f4f5f2;         /* page */
+    --panel: #ffffff;         /* raised surfaces */
+    --muted: #5a6470;         /* secondary text */
+    --rule: #dfe2dc;          /* hairlines */
+    --accent: #9a6410;        /* gold layer, used sparingly */
+    --accent-soft: #f3e6cc;
+    --bronze: #9c5a2e;
+    --silver: #6f7b86;
+    --gold: #b07a17;
+    --diamond: #2f7f8f;
+    --font-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --font-body: "IBM Plex Sans", "Helvetica Neue", Arial, system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --s-xs: .78rem; --s-sm: .9rem; --s-md: 1.02rem; --s-lg: 1.25rem; --s-xl: 1.75rem; --s-2xl: 2.5rem;
+    --radius: 10px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e9ece8; --paper: #0f1317; --panel: #161b21; --muted: #98a2ad; --rule: #262d35;
+      --accent: #e3b057; --accent-soft: #2c2415;
+      --bronze: #d08a5c; --silver: #a9b4be; --gold: #e3b057; --diamond: #6cc3d2;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e9ece8; --paper: #0f1317; --panel: #161b21; --muted: #98a2ad; --rule: #262d35;
+    --accent: #e3b057; --accent-soft: #2c2415;
+    --bronze: #d08a5c; --silver: #a9b4be; --gold: #e3b057; --diamond: #6cc3d2;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--font-body); font-size: var(--s-md); line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--paper); }
+  a { color: inherit; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+  img { max-width: 100%; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; letter-spacing: -.02em; }
+  p { margin: 0; }
+  .wrap {
+    width: 100%; max-width: 1120px; margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .mono { font-family: var(--font-mono); }
+  .label {
+    font-family: var(--font-mono); font-size: var(--s-xs); letter-spacing: .08em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  /* Nav */
+  nav {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(12px); border-bottom: 1px solid var(--rule);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; height: 60px; }
+  .brand { font-family: var(--font-mono); font-weight: 500; font-size: var(--s-sm); text-decoration: none; }
+  .brand b { color: var(--accent); font-weight: 500; }
+  .links { display: flex; gap: 22px; font-size: var(--s-sm); }
+  .links a { text-decoration: none; color: var(--muted); }
+  .links a:hover { color: var(--ink); }
+
+  /* Hero */
+  .hero { padding-block: 72px 56px; }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 56px; align-items: center; }
+  .hero h1 { font-size: clamp(2.4rem, 5.4vw, 4.1rem); line-height: 1.02; font-weight: 800; margin-top: 18px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .lede { font-size: var(--s-lg); color: var(--muted); max-width: 36ch; margin-top: 22px; line-height: 1.5; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 8px;
+    font-weight: 600; font-size: var(--s-sm); text-decoration: none; border: 1px solid var(--ink); cursor: pointer;
+    font-family: var(--font-body);
+  }
+  .btn.solid { background: var(--ink); color: var(--paper); }
+  .btn.ghost { background: transparent; color: var(--ink); }
+  .btn:hover { transform: translateY(-1px); }
+
+  .schema {
+    background: var(--panel); border: 1px solid var(--rule); border-radius: var(--radius);
+    overflow: hidden; min-width: 0;
+  }
+  .schema-head { display: flex; gap: 16px; align-items: center; padding: 18px; border-bottom: 1px solid var(--rule); }
+  .schema-head img { width: 168px; height: 168px; border-radius: 50%; object-fit: cover; object-position: 50% 35%; flex: none;
+    border: 4px solid var(--panel); box-shadow: 0 0 0 1px var(--rule), 0 12px 30px color-mix(in srgb, var(--ink) 18%, transparent); }
+  .schema-head { flex-direction: column; text-align: center; padding: 28px 18px 20px; gap: 14px; }
+  .schema-head h2 { font-size: var(--s-lg); }
+  .schema-head p { color: var(--muted); font-size: var(--s-sm); }
+  .facts { margin: 0; padding: 4px 18px 8px; }
+  .facts div { display: flex; justify-content: space-between; gap: 16px; padding-block: 11px; border-bottom: 1px solid var(--rule); font-size: var(--s-sm); }
+  .facts div:last-child { border-bottom: 0; }
+  .facts dt { color: var(--muted); flex: none; }
+  .facts dd { margin: 0; font-weight: 600; text-align: right; min-width: 0; }
+  .schema pre {
+    margin: 0; padding: 16px 18px; font-family: var(--font-mono); font-size: .8rem; line-height: 1.75;
+    overflow-x: auto; color: var(--ink);
+  }
+  .schema .k { color: var(--muted); }
+  .schema .t { color: var(--diamond); }
+  .schema .v { color: var(--accent); }
+
+  /* Impact strip */
+  .impact { border-block: 1px solid var(--rule); }
+  .impact .wrap { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .metric { padding-block: 26px; padding-inline: 20px; border-left: 1px solid var(--rule); }
+  .metric:first-child { border-left: 0; padding-left: 0; }
+  .metric strong { display: block; font-family: var(--font-display); font-size: var(--s-2xl); line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .metric span { display: block; margin-top: 8px; font-size: var(--s-sm); color: var(--muted); }
+
+  section { padding-block: 84px; }
+  .sec-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 40px; align-items: end; margin-bottom: 40px; }
+  .sec-head h2 { font-size: var(--s-2xl); line-height: 1.08; font-weight: 700; margin-top: 10px; }
+  .sec-head p { color: var(--muted); max-width: 58ch; }
+
+  /* Lineage */
+  .lineage { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; position: relative; }
+  .node { position: relative; padding: 20px 18px 22px; border-top: 3px solid var(--c); min-width: 0; }
+  .node + .node { border-left: 1px solid var(--rule); }
+  .node .layer { font-family: var(--font-mono); font-size: var(--s-xs); letter-spacing: .08em; text-transform: uppercase; color: var(--c); }
+  .node h3 { font-size: var(--s-lg); margin-top: 6px; }
+  .node p { font-size: var(--s-sm); color: var(--muted); margin-top: 8px; }
+  .node .packet {
+    position: absolute; top: -6px; left: 0; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--c); animation: flow 5s linear infinite; animation-delay: var(--d);
+  }
+  @keyframes flow { 0% { left: 0; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { left: calc(100% - 9px); opacity: 0; } }
+  .src { --c: var(--muted); } .brz { --c: var(--bronze); } .slv { --c: var(--silver); } .gld { --c: var(--gold); } .dia { --c: var(--diamond); }
+  .crosscut {
+    margin-top: 18px; padding: 16px 18px; border: 1px dashed var(--rule); border-radius: var(--radius);
+    display: flex; flex-wrap: wrap; gap: 10px 26px; font-size: var(--s-sm); color: var(--muted);
+  }
+  .crosscut b { color: var(--ink); font-weight: 600; }
+
+  /* Case studies */
+  .cases { display: grid; gap: 20px; }
+  .case {
+    display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 2fr); gap: 36px;
+    background: var(--panel); border: 1px solid var(--rule); border-radius: var(--radius); padding: 30px;
+  }
+  .case-meta { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .case-meta h3 { font-size: var(--s-xl); line-height: 1.12; }
+  .chip {
+    align-self: flex-start; font-family: var(--font-mono); font-size: var(--s-xs); letter-spacing: .04em;
+    padding: 4px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent);
+  }
+  .case-meta a { font-size: var(--s-sm); font-weight: 600; color: var(--accent); text-decoration: none; margin-top: auto; }
+  .case-meta a:hover { text-decoration: underline; }
+  .pao { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; min-width: 0; }
+  .pao div { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .pao p { font-size: var(--s-sm); color: var(--muted); }
+  .pao .out p { color: var(--ink); }
+  .outs { margin: 0; padding-left: 16px; display: grid; gap: 8px; font-size: var(--s-sm); }
+  .outs li::marker { color: var(--accent); }
+  .outs b { font-weight: 600; }
+
+  /* Principles */
+  .principles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
+  .principle { padding: 26px 28px 28px 0; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 8px; }
+  .principle:nth-child(even) { padding-left: 28px; padding-right: 0; border-left: 1px solid var(--rule); }
+  .principle h3 { font-size: var(--s-lg); }
+  .principle p { color: var(--muted); font-size: var(--s-sm); max-width: 54ch; }
+
+  /* Experience */
+  .xp { display: grid; gap: 0; }
+  .company { display: grid; grid-template-columns: minmax(0, 220px) minmax(0, 1fr); gap: 36px; padding-block: 32px; border-top: 1px solid var(--rule); }
+  .company-name h3 { font-size: var(--s-xl); }
+  .company-name p { font-size: var(--s-sm); color: var(--muted); margin-top: 4px; }
+  .roles { display: grid; gap: 28px; min-width: 0; }
+  .role-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; align-items: baseline; }
+  .role-top h4 { margin: 0; font-family: var(--font-display); font-size: var(--s-lg); font-weight: 700; }
+  .when { font-family: var(--font-mono); font-size: var(--s-xs); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .now { color: var(--accent); }
+  .program { font-size: var(--s-sm); color: var(--muted); margin-top: 4px; }
+  .roles ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 6px; }
+  .roles li { font-size: var(--s-sm); color: var(--muted); }
+  .roles li::marker { color: var(--accent); }
+  .roles li b { color: var(--ink); font-weight: 600; }
+
+  /* Toolkit */
+  .toolkit { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 36px; }
+  .tool-group { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .tool-group ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tool-group li { font-size: var(--s-sm); padding: 4px 10px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); }
+
+  /* Creds */
+  .creds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; }
+  .wins { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0; margin-top: 14px; border-top: 1px solid var(--rule); }
+  .win { padding: 22px 28px 24px 0; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .win:nth-child(even) { padding-left: 28px; padding-right: 0; border-left: 1px solid var(--rule); }
+  .win strong { font-family: var(--font-display); font-size: var(--s-xl); line-height: 1.1; color: var(--accent); font-variant-numeric: tabular-nums; }
+  .win p { font-size: var(--s-sm); color: var(--muted); max-width: 56ch; }
+  .cred-list { display: grid; gap: 0; margin-top: 14px; }
+  .cred { display: flex; justify-content: space-between; gap: 16px; padding-block: 14px; border-top: 1px solid var(--rule); font-size: var(--s-sm); }
+  .cred:last-child { border-bottom: 1px solid var(--rule); }
+  .cred b { font-weight: 600; display: block; }
+  .cred span { color: var(--muted); }
+  .cred a { color: var(--accent); text-decoration: none; font-weight: 600; white-space: nowrap; }
+
+  /* Contact */
+  .contact { background: var(--ink); color: var(--paper); }
+  .contact .wrap { padding-block: 72px; display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: end; }
+  .contact h2 { font-size: clamp(2rem, 4vw, 3rem); line-height: 1.05; }
+  .contact p { opacity: .75; margin-top: 14px; max-width: 46ch; }
+  .reach { display: grid; gap: 12px; }
+  .reach-row {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    padding: 14px 16px; border: 1px solid color-mix(in srgb, var(--paper) 22%, transparent); border-radius: 8px;
+    font-family: var(--font-mono); font-size: var(--s-sm); min-width: 0;
+  }
+  .reach-row span { overflow-wrap: anywhere; user-select: all; }
+  .reach-row a, .reach-row button {
+    font-family: var(--font-body); font-size: var(--s-xs); font-weight: 600; color: var(--paper);
+    background: transparent; border: 1px solid color-mix(in srgb, var(--paper) 40%, transparent);
+    border-radius: 6px; padding: 6px 10px; text-decoration: none; cursor: pointer; white-space: nowrap;
+  }
+  footer { padding-block: 26px 36px; font-size: var(--s-xs); color: var(--muted); }
+  footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; }
+
+  @media (max-width: 900px) {
+    .hero-grid, .sec-head, .case, .company, .contact .wrap, .creds { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .lineage { grid-template-columns: minmax(0, 1fr); }
+    .node + .node { border-left: 0; }
+    .node .packet { display: none; }
+    .impact .wrap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .metric:nth-child(3) { border-left: 0; padding-left: 0; }
+    .metric:nth-child(n+3) { border-top: 1px solid var(--rule); }
+    .toolkit { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pao { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+    .principles, .wins { grid-template-columns: minmax(0, 1fr); }
+    .win, .win:nth-child(even) { padding: 20px 0; border-left: 0; }
+    .principle, .principle:nth-child(even) { padding: 22px 0; border-left: 0; }
+    .links a:not(:last-child) { display: none; }
+    section { padding-block: 60px; }
+    .hero { padding-block: 44px 40px; }
+  }
+  @media (max-width: 520px) {
+    .toolkit { grid-template-columns: minmax(0, 1fr); }
+    .metric { padding-inline: 12px; }
+    .case { padding: 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .node .packet { animation: none; display: none; }
+    .btn:hover { transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav aria-label="Primary">
+  <div class="wrap">
+    <a class="brand" href="#top">vinay<b>.</b>deekonda</a>
+    <div class="links">
+      <a href="#approach">Approach</a>
+      <a href="#work">Selected work</a>
+      <a href="#experience">Experience</a>
+      <a href="#toolkit">Toolkit</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="label">Staff Data Engineer · Data Intelligence · Asurion</p>
+      <h1>I turn legacy data estates into lakehouses teams <em>trust</em>.</h1>
+      <p class="lede">15+ years designing data platforms on Databricks, Spark, and AWS, from state Medicaid eligibility systems to enterprise datamarts that run the business.</p>
+      <div class="cta">
+        <a class="btn solid" href="#work">See selected work</a>
+        <a class="btn ghost" href="https://www.linkedin.com/in/vinay-deekonda-4b8615143/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+
+    <aside class="schema" aria-label="Profile summary">
+      <div class="schema-head">
+        <img src="vinay_profile.jpg" alt="Headshot of Vinay Deekonda" width="168" height="168">
+        <div>
+          <h2>Vinay Deekonda</h2>
+          <p>Staff Data Engineer, Asurion</p>
+        </div>
+      </div>
+      <dl class="facts">
+        <div><dt>Team</dt><dd>Data Intelligence · AI enablement</dd></div>
+        <div><dt>Experience</dt><dd>15+ years</dd></div>
+        <div><dt>Platform</dt><dd>Databricks · Spark · AWS</dd></div>
+        <div><dt>Focus</dt><dd>Lakehouse datamarts &amp; platform standards</dd></div>
+        <div><dt>Leadership</dt><dd>Led teams of up to 13 engineers</dd></div>
+        <div><dt>Previously</dt><dd>Deloitte · Hitachi Consulting</dd></div>
+        <div><dt>Based in</dt><dd>Nashville, TN</dd></div>
+      </dl>
+    </aside>
+  </div>
+</header>
+
+<div class="impact" aria-label="Highlights">
+  <div class="wrap">
+    <div class="metric"><strong>2 weeks</strong><span>of testing saved per platform upgrade, plus ~$10K per run</span></div>
+    <div class="metric"><strong>3,800+</strong><span>production SQL jobs scored for optimization</span></div>
+    <div class="metric"><strong>$5M</strong><span>projected savings from a reshipment data model</span></div>
+    <div class="metric"><strong>186+</strong><span>PRs merged to UAT and prod in six months</span></div>
+  </div>
+</div>
+
+<main>
+<section id="approach">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="label">Approach</p>
+        <h2>Where I work in the stack</h2>
+      </div>
+      <p>I own data from the first ingest to the dataset an executive reads, and I set the standards that keep every layer reliable, reviewable, and cheap to run.</p>
+    </div>
+
+    <div class="lineage" role="list">
+      <div class="node src" role="listitem" style="--d:0s">
+        <span class="packet" aria-hidden="true"></span>
+        <p class="layer">Sources</p>
+        <h3>Ingest</h3>
+        <p>Reusable ingestion components for APIs, relational databases, SFTP, and file stores.</p>
+      </div>
+      <div class="node brz" role="listitem" style="--d:1s">
+        <span class="packet" aria-hidden="true"></span>
+        <p class="layer">Bronze</p>
+        <h3>Land</h3>
+        <p>Raw history on Delta Lake, governed in Unity Catalog, with PII handled by policy.</p>
+      </div>
+      <div class="node slv" role="listitem" style="--d:2s">
+        <span class="packet" aria-hidden="true"></span>
+        <p class="layer">Silver</p>
+        <h3>Conform</h3>
+        <p>Consistent keys, explicit dedup, partition pruning, and incremental MERGE patterns.</p>
+      </div>
+      <div class="node gld" role="listitem" style="--d:3s">
+        <span class="packet" aria-hidden="true"></span>
+        <p class="layer">Gold</p>
+        <h3>Model</h3>
+        <p>Datamarts and L3 reporting pipelines for customer experience, field ops, marketing, and performance.</p>
+      </div>
+      <div class="node dia" role="listitem" style="--d:4s">
+        <span class="packet" aria-hidden="true"></span>
+        <p class="layer">Diamond</p>
+        <h3>Serve</h3>
+        <p>Trusted, reusable data products and dashboards that stakeholders make decisions on.</p>
+      </div>
+    </div>
+    <div class="crosscut">
+      <span><b>Across every layer:</b></span>
+      <span>SQL &amp; naming standards</span>
+      <span>Lineage conventions</span>
+      <span>dev → UAT → prod with GitHub Actions</span>
+      <span>Root-cause analysis with Spark UI</span>
+      <span>Cost &amp; performance tuning</span>
+    </div>
+  </div>
+</section>
+
+<section id="work" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="label">Selected work</p>
+        <h2>Problems I've taken apart</h2>
+      </div>
+      <p>Projects I designed and led at Asurion, with the result each one delivered.</p>
+    </div>
+
+    <div class="cases">
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">Platform reliability</span>
+          <h3>Risk-based validation for Databricks upgrades</h3>
+          <a href="https://www.linkedin.com/pulse/databricks-sql-upgrade-tester-catching-risky-before-runtime-deekonda-xsi7e/" target="_blank" rel="noopener">Read the article ↗</a>
+          <a href="https://www.linkedin.com/posts/vinay-deekonda-4b8615143_dataengineering-databricks-automation-activity-7480951495002202113-Wdj5" target="_blank" rel="noopener" style="margin-top:0">Read the post ↗</a>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>An org-wide SQL warehouse upgrade could not depend on re-running all ~1,800 DAGs in UAT. Testing was ad hoc, slow, and costly.</p></div>
+          <div><p class="label">Approach</p><p>A 3-tier framework: ~150 EXPLAIN probes that scan the whole repo, pattern-cover job manifests, and per-domain test lists owned by recent contributors. Wired into GitHub Actions with a runbook for every team.</p></div>
+          <div class="out"><p class="label">Outcome</p>
+            <ul class="outs">
+              <li><b>Time:</b> saves engineers about 2 weeks of testing on every upgrade, with full-repo compile coverage in about 5 minutes.</li>
+              <li><b>Shared publicly:</b> I published the approach as a LinkedIn article, so any team on a Databricks SQL warehouse can test its jobs' syntax and functions against a new version without running the jobs.</li>
+              <li><b>Cost:</b> avoids about $10K in compute for every full UAT test run.</li>
+              <li><b>Onboarding:</b> engineers new to the platform can check upgrade readiness themselves, guided by the runbook.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">AI enablement · Knowledge sharing</span>
+          <h3>PDI toolkit: an AI assistant for PySpark Data Integration</h3>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>PDI (PySpark Data Integration), our metadata-driven ETL framework, runs critical warehouse loads, but few engineers knew how it works: load pointers, task wiring, metadata promotion, and reloads. Every change or production issue waited on a handful of experts.</p></div>
+          <div><p class="label">Approach</p><p>Captured how the framework actually behaves as structured context for an AI coding assistant, packaged as a plugin. Engineers ask questions in plain language and get guided steps for runtime debugging, task changes, promotion, reloads, and upgrade checks.</p></div>
+          <div class="out"><p class="label">Outcome</p>
+            <ul class="outs">
+              <li><b>Self-serve:</b> any engineer can learn the framework, make changes, and promote them without waiting on an expert.</li>
+              <li><b>Resilience:</b> less dependence on single people and faster onboarding for new engineers.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">GenAI · Hackathon 3rd place</span>
+          <h3>Ledger &amp; Holmes: AI cost-anomaly detection</h3>
+          <a href="https://www.linkedin.com/posts/vinay-deekonda-4b8615143_asurion-hackathon-nashville-activity-7463294879759060992-Z-y2" target="_blank" rel="noopener">Read the post ↗</a>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>Cost anomalies across 13 Dynamics 365 instances surfaced late, with no clear owner or dollar impact, which slowed month-end close.</p></div>
+          <div><p class="label">Approach</p><p>Team ClarifAI built an AI assistant that detects anomalies, sizes the impact, suggests owners and next actions, and drafts ServiceNow-ready incident context.</p></div>
+          <div class="out"><p class="label">Outcome</p><p>3rd place at Asurion Hackathon 2026 (Nashville Hub), a Databricks dashboard for central insight, and a showcase slot at Asurion Next.</p></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">Modernization · Cost &amp; speed</span>
+          <h3>Survey platform migration to Databricks</h3>
+          <a href="https://www.linkedin.com/posts/vinay-deekonda-4b8615143_databricks-pyspark-dataengineering-activity-7459686900476317698-a-WT" target="_blank" rel="noopener">Read the post ↗</a>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>The survey distribution pipeline was split across Presto, Hive, a dedicated Postgres database, SFTP, and ActiveBatch scripts. Every change touched several systems, failures were hard to trace, and holiday pauses needed manual ops requests during code freezes.</p></div>
+          <div><p class="label">Approach</p><p>Led the migration into one modular PySpark notebook on Databricks with direct source access, exclusion rules and holiday pauses in code, and monitoring and alerts for Operations. Moved three supporting jobs into the data quality and L3 layers.</p></div>
+          <div class="out"><p class="label">Outcome</p>
+            <ul class="outs">
+              <li><b>Time:</b> change requests went from 4+ weeks to under 1 week, and 10+ were delivered after launch.</li>
+              <li><b>Money:</b> the legacy Postgres database was decommissioned, saving about $3K a year in infrastructure, and the moved jobs cut compute further.</li>
+              <li><b>Decisions:</b> surveys now reach unhandled calls too, so managers got reports on mishandled interactions and used them to target coaching.</li>
+            </ul>
+          </div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">Observability</span>
+          <h3>Survey pipeline health dashboard</h3>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>Survey runs depended on many upstream sources. A stale table, a drop in row counts, or a failure alert that never sent could stop surveys silently, and the business often noticed first.</p></div>
+          <div><p class="label">Approach</p><p>Built a monitoring dashboard that tracks source row counts and refresh delays, grouped by survey program. Fixed the gaps in failure alerts and folded many alert emails into one notification backed by data quality checks.</p></div>
+          <div class="out"><p class="label">Outcome</p><p>Engineers and Operations see the pipeline's health at a glance and catch source issues before surveys go out. It improved the platform's stability and reliability and cut time spent chasing failures.</p></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">Data modeling · Business impact</span>
+          <h3>Mobility reshipment insights</h3>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>Device reshipments were frequent, and the root causes were spread across several source systems with no single view.</p></div>
+          <div><p class="label">Approach</p><p>Designed a two-phase data model joining several source systems, shaped around how experts and stakeholders use the data downstream.</p></div>
+          <div class="out"><p class="label">Outcome</p><p>Projected $5M in savings and about 10% fewer reshipment events in a year, with more reliable data behind expert coaching and pay.</p></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">Healthcare · Deloitte</span>
+          <h3>Medicaid patient liability logic for a statewide go-live</h3>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>Tennessee's move from its legacy eligibility system to a new platform could not go live until the system correctly calculated how much each Medicaid member owes toward their care. Errors would directly affect members' bills.</p></div>
+          <div><p class="label">Approach</p><p>Wrote the patient liability calculation in about 1,200 lines of PL/SQL that encode the program's financial rules, and validated it against the migrated data from the legacy system.</p></div>
+          <div class="out"><p class="label">Outcome</p><p>The logic passed go-live validation and supported the launch of the statewide eligibility system, part of migrating two state healthcare programs (Tennessee and Georgia) from legacy systems to next-generation platforms.</p></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">Engineering standards</span>
+          <h3>Scoring 3,800+ SQL jobs for optimization</h3>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>Thousands of reporting SQL jobs had no shared view of which ones carried the most performance and correctness risk.</p></div>
+          <div><p class="label">Approach</p><p>Built an automated scan that scores every L3 job on anti-patterns such as SELECT *, cross-join risk, DISTINCT-heavy logic, and missing date filters.</p></div>
+          <div class="out"><p class="label">Outcome</p><p>A ranked remediation list that now guides upgrade planning and cleanup priorities. Recognized with a Divine Discontent award.</p></div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case-meta">
+          <span class="chip">AI-assisted engineering</span>
+          <h3>Teaching AI to write production-grade SQL</h3>
+          <a href="https://www.linkedin.com/posts/vinay-deekonda-4b8615143_ai-can-generate-optimized-sql-queries-but-activity-7459963739786661888-T-dO" target="_blank" rel="noopener">Read the post ↗</a>
+        </div>
+        <div class="pao">
+          <div><p class="label">Problem</p><p>AI coding assistants write SQL that works but stops at "good enough": unneeded column scans, missed partition pruning, overused DISTINCT, inefficient joins, and ignored data skew.</p></div>
+          <div><p class="label">Approach</p><p>Wrote our SQL optimization standards as a reusable rules file for the AI assistant: push filters early, prune partitions, select only needed columns, avoid shuffles, and judge the execution plan, not just the syntax.</p></div>
+          <div class="out"><p class="label">Outcome</p><p>AI-generated queries follow the same standards as senior-reviewed code for Databricks and Spark. The rules are versioned and improve as best practices evolve.</p></div>
+        </div>
+      </article>
+    </div>
+
+    <p class="label" style="margin-top:44px">Production wins</p>
+    <div class="wins">
+      <div class="win">
+        <strong>Surveys restored</strong>
+        <p>Valid interactions were being hard-deleted and surveys stopped sending. Replaced the deletes with a MERGE and soft-delete pattern, so survey eligibility reads only active records.</p>
+      </div>
+      <div class="win">
+        <strong>2 h → &lt;30 min</strong>
+        <p>Traced a source ingestion job that pulled data outside its date window. Fixing the incremental filter cut the regular run and ad hoc re-pulls by over 4×, ending downstream reporting delays.</p>
+      </div>
+      <div class="win">
+        <strong>&lt;1 week</strong>
+        <p>Learned a new container framework and shipped PII scrubbing of free-text survey verbatims to production on under a week's notice, meeting a new compliance requirement.</p>
+      </div>
+      <div class="win">
+        <strong>Right channel, right expert</strong>
+        <p>Fixed aggregation logic where messaging volume lost to voice in channel attribution, correcting the metrics used for coaching and reporting.</p>
+      </div>
+      <div class="win">
+        <strong>Reloads without code</strong>
+        <p>Built reload processes driven by user-managed control tables. Anyone can set a date range to backfill missed data or reprocess a load, full or partial, with no code change, PR, or recertification.</p>
+      </div>
+      <div class="win">
+        <strong>Rollback, then recovery</strong>
+        <p>A Unity Catalog migration of the survey pipeline failed on a production configuration. I found the root cause, coordinated the rollback so surveys stayed on schedule, retested in UAT, and guided Ops through the corrected release.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="principles" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="label">How I work</p>
+        <h2>Engineering principles</h2>
+      </div>
+      <p>I look past the ticket for the bottleneck behind it, then fix it with a standard, an automation, or a better design.</p>
+    </div>
+    <div class="principles">
+      <div class="principle">
+        <h3>Standards that scale</h3>
+        <p>ANSI joins, atomic Delta writes, naming and lineage conventions. A pattern written once and reviewed everywhere beats a hundred clever one-offs.</p>
+      </div>
+      <div class="principle">
+        <h3>Release discipline</h3>
+        <p>Config-driven deployments promoted dev → UAT → prod through CI/CD, with downstream readers checked before anything ships.</p>
+      </div>
+      <div class="principle">
+        <h3>Root cause, not workarounds</h3>
+        <p>SLA misses and Spark failures traced through logs and query plans until the cause is fixed and written into a runbook.</p>
+      </div>
+      <div class="principle">
+        <h3>AI-augmented, still governed</h3>
+        <p>Cursor and generative AI speed up how I build and review, without loosening reliability, security, or data governance.</p>
+      </div>
+      <div class="principle">
+        <h3>Grow other engineers</h3>
+        <p>I have led teams of up to 13 and mentor and train engineers at every level, onshore and offshore, on pipelines, data quality, extracts, and PDI, through pairing, code reviews, and knowledge-transfer sessions.</p>
+      </div>
+      <div class="principle">
+        <h3>Write the docs I wish I'd had</h3>
+        <p>When I took over the survey platform, much of how it worked was undocumented, and I had to piece it together myself. Now I document what I learn, through runbooks, process guides, and Confluence pages, so the next engineer doesn't start where I did. With toolkits and AI assistants, Operations and new engineers can support and change systems without waiting on one expert.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="label">Experience</p>
+        <h2>Career log</h2>
+      </div>
+      <p>From legacy-to-next-gen migrations for two state healthcare programs to Databricks lakehouses at enterprise scale.</p>
+    </div>
+
+    <div class="xp">
+      <div class="company">
+        <div class="company-name">
+          <h3>Asurion</h3>
+          <p>Nashville · Hybrid<br>Jun 2022 – Present</p>
+        </div>
+        <div class="roles">
+          <div>
+            <div class="role-top"><h4>Staff Data Engineer</h4><span class="when now">Feb 2026 – Present</span></div>
+            <ul>
+              <li><b>Data Intelligence (AI enablement):</b> lead hands-on evaluations of AI assistants for analytics and engineering, testing them on real data workflows to give leadership the evidence for which tools to adopt and who gets access.</li>
+              <li><b>Own the Customer Service Hub domain:</b> contact-center chat and voice datamarts built on raw event ingestion, feeding survey eligibility, CX analytics, and expert performance reporting.</li>
+              <li><b>Delivered 56+ tickets and 186+ merged PRs in six months</b> across new source onboarding, pipeline enhancements, defect fixes, and optimization, with no disruption to survey or reporting operations.</li>
+              <li><b>Own design and delivery</b> of Databricks / Delta Lake datamarts and L3 reporting pipelines across customer experience, field operations, marketing, and performance.</li>
+              <li><b>Built an AI assistant plugin for PDI (PySpark Data Integration)</b> that captures how it works, so any engineer can ask questions, make changes, and promote them without an expert on hand.</li>
+              <li><b>Consolidated the domain's datamart assets</b> into one standard structure aligned with CI/CD, and fixed workforce SCD identity logic for finance and HR consumers.</li>
+              <li><b>Set SQL and pipeline standards</b> (ANSI joins, incremental MERGE patterns, naming and lineage conventions) for reliability and reviewability.</li>
+              <li><b>Lead release practice</b> for data products from dev → UAT → prod with config-driven deployments and GitHub Actions CI/CD.</li>
+              <li><b>Resolve production issues</b> (Spark / Delta failures, SLA misses, slow queries) through logs, Spark UI, and systematic root-cause analysis.</li>
+              <li><b>Turn requirements into products:</b> trusted gold and diamond-layer datasets built with domain stakeholders.</li>
+              <li><b>Raise the bar for the team</b> through design reviews, mentoring, and clearer configs, schedules, and runbooks.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="role-top"><h4>Senior Data Engineer, Technical Lead</h4><span class="when">Jun 2022 – Jan 2026</span></div>
+            <ul>
+              <li><b>Tech lead for the CX / Survey team</b> and later the merged Marketing and CX space; built Databricks / PySpark ETL, including critical survey pipelines with transformation, aggregation, and quality checks.</li>
+              <li><b>Led the CX extract migration</b> to a new framework, moved survey alerts into the Data Quality framework to cut cost, and supported the survey PDI migration on deadline.</li>
+              <li><b>Documented the survey platform end to end</b>, filling the gaps I hit when I joined, and rewrote the operations runbook so Ops could support it off-hours without an engineer. Presented the support plan to directors.</li>
+              <li><b>Designed lakehouse and warehouse solutions on AWS</b> for petabyte-scale storage and retrieval.</li>
+              <li><b>Tuned Spark</b> with partition pruning, bounded windows, efficient dedup, and right-sized cluster configs.</li>
+              <li><b>Integrated many sources</b> with consistent keys; wrote and optimized complex SQL for high-volume, multi-source logic.</li>
+              <li><b>Made reloads self-serve</b> with user-managed control tables, so engineers can backfill or reprocess any date range without code changes or recertification.</li>
+              <li><b>Orchestrated with Airflow</b> and built reusable ingestion for APIs, relational databases, and file stores.</li>
+              <li><b>Mentored engineers onshore and offshore</b> on extracts, PDI, and the Data Quality framework, and ran recurring knowledge-sharing sessions.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="company">
+        <div class="company-name">
+          <h3>Deloitte</h3>
+          <p>Nashville · Atlanta<br>Nov 2014 – Jun 2022</p>
+        </div>
+        <div class="roles">
+          <div>
+            <div class="role-top"><h4>Project Delivery Specialist, Team Lead</h4><span class="when">May 2021 – Jun 2022</span></div>
+            <p class="program">Tennessee Medicaid Healthcare Project (TEDS)</p>
+            <ul>
+              <li><b>Led Operations and Data Management</b> as the primary stakeholder contact for status, inquiries, and issue resolution.</li>
+              <li><b>Aligned BAs, developers, and QA</b> on delivery and enforced quality reviews for stakeholder and compliance standards.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="role-top"><h4>Lead Data Engineer</h4><span class="when">Jan 2021 – Apr 2021</span></div>
+            <p class="program">TEDS: Tennessee Eligibility Determination System</p>
+            <ul>
+              <li><b>Led pipeline and data-quality delivery</b> for statewide Medicaid eligibility workloads and downstream reporting.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="role-top"><h4>Data Engineer, ETL</h4><span class="when">Nov 2017 – Jan 2021</span></div>
+            <p class="program">TEDS: Tennessee Eligibility Determination System</p>
+            <ul>
+              <li><b>Built the patient liability logic for go-live:</b> about 1,200 lines of PL/SQL that calculate how much each Medicaid member owes toward their care. It was a go-live-critical part of the migration and passed for launch.</li>
+              <li><b>Closed 3,000+ defect tickets in two years</b>, including court-ordered fixes with fixed legal deadlines that I delivered on time. Resolving them helped eligible Tennesseans get their Medicaid and human-services benefits.</li>
+              <li><b>Migrated legacy eligibility data to the next-generation platform</b> with Informatica, and built and supported ETL for the statewide Medicaid and human-services system.</li>
+              <li><b>Protected data integrity</b> across SIT, UAT, and production for high-volume eligibility workloads.</li>
+            </ul>
+          </div>
+          <div>
+            <div class="role-top"><h4>ETL Developer</h4><span class="when">Nov 2014 – Nov 2017</span></div>
+            <p class="program">GAIES: Georgia Integrated Eligibility System</p>
+            <ul>
+              <li><b>Caught a go-live address defect:</b> while validating migrated data on go-live day, found that street directions (N, S, E, W) were missing from member addresses. Fixing it that day kept Medicaid renewal notices from being returned by USPS, avoiding the cost of re-mailing and the risk of members missing their renewals.</li>
+              <li><b>Migrated legacy eligibility data to the next-generation system</b> with Informatica PowerCenter into Oracle.</li>
+              <li><b>Owned the Informatica PowerCenter ETL life cycle</b> into Oracle, from technical specs to production.</li>
+              <li><b>Implemented PII data-masking rules</b> and tuned mappings and sessions with partitioning.</li>
+              <li><b>Led two associates</b> on incident management across SIT, UAT, and production.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="company">
+        <div class="company-name">
+          <h3>Hitachi Consulting</h3>
+          <p>Hyderabad, India<br>Jul 2010 – Jul 2013</p>
+        </div>
+        <div class="roles">
+          <div>
+            <div class="role-top"><h4>Software Engineer</h4><span class="when">Jul 2010 – Jul 2013</span></div>
+            <ul>
+              <li><b>Designed data warehouses</b> on star and snowflake dimensional models, with logical and physical models in ERwin.</li>
+              <li><b>Gathered ETL requirements</b> with business analysts and cross-functional teams through functional and technical design.</li>
+              <li><b>Built Informatica mappings and mapplets</b> to load flat files and databases into staging and the warehouse, using lookups, routers, aggregators, normalizers, and update strategies.</li>
+              <li><b>Unit tested loads</b> across sources to validate data before release.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="toolkit" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="label">Toolkit</p>
+        <h2>What I build with</h2>
+      </div>
+      <p>Grouped by where each tool sits in the platform.</p>
+    </div>
+    <div class="toolkit">
+      <div class="tool-group">
+        <p class="label">Lakehouse platform</p>
+        <ul><li>Databricks</li><li>Apache Spark</li><li>PySpark</li><li>Delta Lake</li><li>Unity Catalog</li><li>AWS</li><li>Event ingestion</li></ul>
+      </div>
+      <div class="tool-group">
+        <p class="label">Languages</p>
+        <ul><li>SQL</li><li>Python</li><li>PL/SQL</li></ul>
+      </div>
+      <div class="tool-group">
+        <p class="label">Orchestration &amp; delivery</p>
+        <ul><li>Airflow</li><li>GitHub Actions</li><li>Git</li><li>ActiveBatch</li><li>OPCON</li><li>New Relic</li></ul>
+      </div>
+      <div class="tool-group">
+        <p class="label">Databases</p>
+        <ul><li>Oracle</li><li>SQL Server</li><li>PostgreSQL</li><li>MySQL</li><li>MongoDB</li></ul>
+      </div>
+      <div class="tool-group">
+        <p class="label">Modeling &amp; ETL</p>
+        <ul><li>Dimensional modeling</li><li>Medallion architecture</li><li>SCD Type 2</li><li>Data quality frameworks</li><li>Informatica</li><li>ERwin</li></ul>
+      </div>
+      <div class="tool-group">
+        <p class="label">BI &amp; AI</p>
+        <ul><li>Tableau</li><li>Power BI</li><li>Generative AI</li><li>Cursor</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="credentials" style="padding-top:0">
+  <div class="wrap creds">
+    <div>
+      <p class="label">Recognition</p>
+      <div class="cred-list">
+        <div class="cred"><div><b>3rd place, Asurion Hackathon 2026</b><span>Nashville Hub · Ledger &amp; Holmes</span></div></div>
+        <div class="cred"><div><b>Divine Discontent award</b><span>SQL scoring of 3,800+ jobs</span></div></div>
+        <div class="cred"><div><b>One Team award</b><span>Extract framework, contact-center migration, PDI partnership</span></div></div>
+        <div class="cred"><div><b>Customer First award</b><span>CS Hub leadership, CX backfills, PDI training</span></div></div>
+      </div>
+    </div>
+    <div>
+      <p class="label">Certifications</p>
+      <div class="cred-list">
+        <div class="cred"><div><b>Section × Asurion ProfAI: AI Proficiency</b><span>Section · Oct 2025</span></div><a href="https://credly.com/badges/62d12846-7992-4eec-a9a4-27cec673e4cb/linked_in_profile" target="_blank" rel="noopener">Verify ↗</a></div>
+        <div class="cred"><div><b>Tableau Analyst</b><span>Tableau Software · Jun 2020</span></div><a href="https://youracclaim.com/badges/9d98de17-d787-43b5-b926-c929db13de53/linked_in_profile" target="_blank" rel="noopener">Verify ↗</a></div>
+      </div>
+    </div>
+    <div>
+      <p class="label">Education</p>
+      <div class="cred-list">
+        <div class="cred"><div><b>M.S., Environmental Health Engineering</b><span>University of New Haven · 2013 – 2014</span></div></div>
+        <div class="cred"><div><b>B.E.</b><span>Osmania University · 2006 – 2010</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <h2>Building a data platform worth trusting?</h2>
+      <p>I'm always glad to talk about Databricks, lakehouse modernization, data engineering leadership, or AI in the engineering workflow.</p>
+    </div>
+    <div class="reach">
+      <div class="reach-row"><span id="email">deekonda.v@gmail.com</span><button type="button" id="copy-email">Copy</button></div>
+      <div class="reach-row"><span>571-253-4491</span><a href="tel:+15712534491">Call</a></div>
+      <div class="reach-row"><span>linkedin.com/in/vinay-deekonda</span><a href="https://www.linkedin.com/in/vinay-deekonda-4b8615143/" target="_blank" rel="noopener">Open ↗</a></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Vinay Deekonda</span>
+    <span class="mono">SELECT * FROM career WHERE status = 'building';</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('copy-email').addEventListener('click', function () {
+    var btn = this, text = document.getElementById('email').textContent;
+    function done(msg) { btn.textContent = msg; setTimeout(function () { btn.textContent = 'Copy'; }, 1800); }
+    function fallback() {
+      var r = document.createRange(); r.selectNodeContents(document.getElementById('email'));
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); done('Selected');
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done('Copied'); }, fallback);
+    } else { fallback(); }
+  });
+</script>
+</body>
+</html>
